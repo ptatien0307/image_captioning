@@ -28,7 +28,7 @@ async def create_upload_files(request: Request, file: UploadFile = File(...)):
     with open(f"{IMAGEDIR}{file.filename}", "wb") as f:
         f.write(contents)
     # image = cv2.imread(os.path.join('images/', file.filename))
-    caption = 'CAPTION'
+    caption = 'CAPTIdasdasadON'
 
     show = file.filename
     return templates.TemplateResponse("index.html", {"request": request, "show": show, "caption": caption})
