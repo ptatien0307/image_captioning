@@ -136,7 +136,7 @@ class Captioner(tf.keras.Model):
             sequence = pad_sequences([sequence], maxlen=self.MAX_LENGTH)
             yhat = self([image, sequence])
             yhat = np.argmax(yhat)
-            word = self.i2w[yhat]
+            word = self.i2w[str(yhat)]
             in_text += ' ' + word
             if word == 'END_TOKEN':
                 break
