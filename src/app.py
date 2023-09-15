@@ -159,7 +159,6 @@ class Captioner(tf.keras.Model):
 
 
 
-# weights = model.get_weights(); new_model.set_weights(weights)
 
 # reconstructed_model = load_model('models/model-v1.keras')
 
