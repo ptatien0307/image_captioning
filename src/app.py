@@ -3,8 +3,12 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 
+import cv2
+import os
 
-IMAGEDIR = "./images/"
+
+
+IMAGEDIR = "images/"
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -23,6 +27,8 @@ async def create_upload_files(request: Request, file: UploadFile = File(...)):
     # save the file
     with open(f"{IMAGEDIR}{file.filename}", "wb") as f:
         f.write(contents)
+    # image = cv2.imread(os.path.join('images/', file.filename))
+    caption = 'CAPTION'
 
     show = file.filename
-    return templates.TemplateResponse("index.html", {"request": request, "show": show})
+    return templates.TemplateResponse("index.html", {"request": request, "show": show, "caption": caption})

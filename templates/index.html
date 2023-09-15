@@ -21,6 +21,12 @@
         <img width="500" src="{{ url_for('images', path=show) }}">
     </div>
     {% endif %}
+
+    {% if caption %}
+    <div style="padding:20px;">
+        <span>{caption}</span>
+    </div>
+    {% endif %}
 </body>
 
 </html>
