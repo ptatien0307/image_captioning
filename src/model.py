@@ -13,16 +13,18 @@ from keras import Input
 import cv2
 import numpy as np
 
-@keras.saving.register_keras_serializable(package="ImageFeatureExtractionLayer")
+
+@keras.saving.register_keras_serializable()
 class ImageFeatureExtractionLayer(tf.keras.layers.Layer):
-    def __init__(self, name=None, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__()
 
         pretrained_model = InceptionV3()
-        feature_extraction = Model(pretrained_model.input, pretrained_model.layers[-2].output)
+        feature_extraction = Model(
+            pretrained_model.input, pretrained_model.layers[-2].output)
         feature_extraction.trainable = False
 
-        self.image_fe_model = Sequential([
+        self.image_fe_model = tf.keras.Sequential([
             Input(shape=(299, 299, 3)),
             feature_extraction,
             Dropout(0.5),
@@ -34,16 +36,16 @@ class ImageFeatureExtractionLayer(tf.keras.layers.Layer):
 
     def get_config(self):
         config = super().get_config().copy()
-        config.update({'image_fe_model': self.image_fe_model,})
+        config.update({'image_fe_model': self.image_fe_model, })
         return config
-    
 
-@keras.saving.register_keras_serializable(package="TextFeatureExtractionLayer")
+
+@keras.saving.register_keras_serializable()
 class TextFeatureExtractionLayer(tf.keras.layers.Layer):
-    def __init__(self, VOCAB_SIZE, EMBEDDING_DIM, MAX_LENGTH, name=None, **kwargs):
+    def __init__(self, VOCAB_SIZE, EMBEDDING_DIM, MAX_LENGTH, **kwargs):
         super().__init__()
 
-        self.text_fe_model = Sequential([
+        self.text_fe_model = tf.keras.Sequential([
             Input(shape=(MAX_LENGTH,)),
             Embedding(VOCAB_SIZE, EMBEDDING_DIM, mask_zero=True),
             Dropout(0.5),
@@ -57,16 +59,17 @@ class TextFeatureExtractionLayer(tf.keras.layers.Layer):
         config = super().get_config().copy()
         config.update({'text_fe_model': self.text_fe_model})
         return config
-    
 
-@keras.saving.register_keras_serializable(package="DecoderLayer")
+
+@keras.saving.register_keras_serializable()
 class DecoderLayer(tf.keras.layers.Layer):
-    def __init__(self, VOCAB_SIZE, EMBEDDING_DIM, MAX_LENGTH, name=None, **kwargs):
+    def __init__(self, VOCAB_SIZE, EMBEDDING_DIM, MAX_LENGTH, **kwargs):
         super().__init__()
         self.image_fe = ImageFeatureExtractionLayer()
-        self.text_fe = TextFeatureExtractionLayer(VOCAB_SIZE, EMBEDDING_DIM, MAX_LENGTH)
+        self.text_fe = TextFeatureExtractionLayer(
+            VOCAB_SIZE, EMBEDDING_DIM, MAX_LENGTH)
 
-        self.model = Sequential([
+        self.model = tf.keras.Sequential([
             Dense(256, activation='relu'),
             Dense(VOCAB_SIZE, activation='softmax')
         ])
@@ -85,18 +88,18 @@ class DecoderLayer(tf.keras.layers.Layer):
     def get_config(self):
         config = super().get_config().copy()
         config.update({'image_fe': self.image_fe,
-                'text_fe': self.text_fe,
-                'model': self.model,}
-        )
+                       'text_fe': self.text_fe,
+                       'model': self.model, }
+                      )
         return config
 
 
-@keras.saving.register_keras_serializable(package="Captioner")
+@keras.saving.register_keras_serializable()
 class Captioner(tf.keras.Model):
     def __init__(self, w2i, i2w,
                  MAX_LENGTH,
                  VOCAB_SIZE,
-                 EMBEDDING_DIM, name=None, **kwargs):
+                 EMBEDDING_DIM, **kwargs):
         super().__init__()
         self.w2i = w2i
         self.i2w = i2w
@@ -129,10 +132,10 @@ class Captioner(tf.keras.Model):
         image = preprocess_input(image)
         image = np.expand_dims(image, axis=0)
 
-
         in_text = 'START_TOKEN'
         for i in range(self.MAX_LENGTH):
-            sequence = [self.w2i[w] for w in in_text.split() if w in self.w2i]
+            sequence = [int(self.w2i[w])
+                        for w in in_text.split() if w in self.w2i]
             sequence = pad_sequences([sequence], maxlen=self.MAX_LENGTH)
             yhat = self([image, sequence])
             yhat = np.argmax(yhat)
