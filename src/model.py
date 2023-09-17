@@ -12,35 +12,20 @@ from keras import Input
 
 import cv2
 import numpy as np
-import string
-import re
-
-
-@keras.saving.register_keras_serializable()
-def standardize(s):
-    s = tf.strings.lower(s)
-    s = tf.strings.regex_replace(s, f'[{re.escape(string.punctuation)}]', '')
-    s = tf.strings.join(['[START]', s, '[END]'], separator=' ')
-    return s
-
-
-tokenizer = tf.keras.layers.TextVectorization(
-    max_tokens=2000,
-    standardize=standardize,
-    ragged=True)
 
 
 @keras.saving.register_keras_serializable()
 class ImageFeatureExtractionLayer(tf.keras.layers.Layer):
     def __init__(self):
         super().__init__()
-
+        # Load pretrained model
         pretrained_model = InceptionV3()
         feature_extraction = Model(
             pretrained_model.input, pretrained_model.layers[-2].output)
         feature_extraction.trainable = False
 
-        self.image_fe_model = tf.keras.Sequential([
+        # Build a model to extract feature from image
+        self.image_fe_model = Sequential([
             Input(shape=(299, 299, 3)),
             feature_extraction,
             Dropout(0.5),
@@ -60,8 +45,8 @@ class ImageFeatureExtractionLayer(tf.keras.layers.Layer):
 class TextFeatureExtractionLayer(tf.keras.layers.Layer):
     def __init__(self, VOCAB_SIZE, EMBEDDING_DIM, MAX_LENGTH):
         super().__init__()
-
-        self.text_fe_model = tf.keras.Sequential([
+        # Build a model to extract feature from text
+        self.text_fe_model = Sequential([
             Input(shape=(MAX_LENGTH,)),
             Embedding(VOCAB_SIZE, EMBEDDING_DIM, mask_zero=True),
             Dropout(0.5),
@@ -81,11 +66,12 @@ class TextFeatureExtractionLayer(tf.keras.layers.Layer):
 class DecoderLayer(tf.keras.layers.Layer):
     def __init__(self, VOCAB_SIZE, EMBEDDING_DIM, MAX_LENGTH):
         super().__init__()
+        # A decoder includes a image feature extractor and text feature extractor
         self.image_fe = ImageFeatureExtractionLayer()
         self.text_fe = TextFeatureExtractionLayer(
             VOCAB_SIZE, EMBEDDING_DIM, MAX_LENGTH)
 
-        self.model = tf.keras.Sequential([
+        self.model = Sequential([
             Dense(256, activation='relu'),
             Dense(VOCAB_SIZE, activation='softmax')
         ])
@@ -120,26 +106,16 @@ class DecoderLayer(tf.keras.layers.Layer):
 
 @keras.saving.register_keras_serializable()
 class Captioner(tf.keras.Model):
-    def __init__(self,
-                 MAX_LENGTH,
-                 EMBEDDING_DIM, **kwargs):
+    def __init__(self, w2i, i2w,
+                 VOCAB_SIZE, MAX_LENGTH, EMBEDDING_DIM, **kwargs):
         super().__init__()
-        self.tokenizer = tokenizer
-
-        self.word_to_index = tf.keras.layers.StringLookup(
-            mask_token="",
-            vocabulary=tokenizer.get_vocabulary())
-
-        self.index_to_word = tf.keras.layers.StringLookup(
-            mask_token="",
-            vocabulary=tokenizer.get_vocabulary(),
-            invert=True)
-
+        self.VOCAB_SIZE = VOCAB_SIZE
         self.MAX_LENGTH = MAX_LENGTH
         self.EMBEDDING_DIM = EMBEDDING_DIM
 
-        self.decoder = DecoderLayer(
-            tokenizer.vocabulary_size(), EMBEDDING_DIM, MAX_LENGTH)
+        self.w2i = w2i
+        self.i2w = i2w
+        self.decoder = DecoderLayer(VOCAB_SIZE, EMBEDDING_DIM, MAX_LENGTH)
 
     def call(self, input):
         image, sequence = input
@@ -149,12 +125,12 @@ class Captioner(tf.keras.Model):
     def get_config(self):
         config = super().get_config().copy()
         config.update({
-            'tokenizer': self.tokenizer,
-            'index_to_word': self.index_to_word,
-            'word_to_index': self.word_to_index,
-            'MAX_LENGTH': self.MAX_LENGTH,
-            'EMBEDDING_DIM': self.EMBEDDING_DIM,
+            'i2w': self.i2w,
+            'w2i': self.w2i,
             'decoder': self.decoder,
+            'MAX_LENGTH': self.MAX_LENGTH,
+            'VOCAB_SIZE': self.VOCAB_SIZE,
+            'EMBEDDING_DIM': self.EMBEDDING_DIM,
         })
         return config
 
@@ -164,18 +140,30 @@ class Captioner(tf.keras.Model):
         image = preprocess_input(image)
         image = np.expand_dims(image, axis=0)
 
-        y_pred = []
         in_text = '[START]'
         for i in range(self.MAX_LENGTH):
-            sequence = tokenizer(in_text)
+            # Tokenize input
+            sequence = [self.w2i[w] for w in in_text.split() if w in self.w2i]
+
+            # Padding
             sequence = pad_sequences([sequence], maxlen=self.MAX_LENGTH)
+
+            # Predict
             yhat = self([image, sequence])
             yhat = np.argmax(yhat)
-            if self.word_to_index('[END]') == tf.constant(yhat, dtype=tf.int64):
+
+            # Convert index into word
+            word = self.i2w[str(yhat)]
+
+            # Add predicted word add the end of the input text
+            in_text += ' ' + word
+
+            # If word is [END] token, then break
+            if word == '[END]':
                 break
 
-            y_pred.append(yhat)
+        final = in_text.split()
+        final = final[1: -1]
+        final = ' '.join(final)
 
-        words = self.index_to_word(y_pred[1:])
-        result = tf.strings.reduce_join(words, axis=-1, separator=' ')
-        return result.numpy().decode()
+        return final
