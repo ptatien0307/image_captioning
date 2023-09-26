@@ -11,7 +11,7 @@ import cv2
 
 from src.model import Captioner
 
-reconstructed_model = load_model('models/model-v1.keras')
+reconstructed_model = load_model('models/model.keras')
 
 
 IMAGEDIR = "images/"
