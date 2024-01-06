@@ -1,9 +1,0 @@
-pandas
-opencv-python
-regex
-numpy
-nltk
-tensorflow
-fastapi[all]
-uvicorn
-Jinja2
