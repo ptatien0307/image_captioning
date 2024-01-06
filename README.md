@@ -34,3 +34,6 @@ a single vector before being fed to the output layer.
 <p align="center">
 <img src="https://github.com/ptatien0307/image_captioning/assets/79583501/fbbd005a-fb62-43c8-9940-d15b2074d63f.png" alt="drawing" width="50%" height="50%"/>
 </p>
+
+# BLEU SCORE
+cnn_bases_attention: 0.41
