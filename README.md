@@ -35,6 +35,23 @@ a single vector before being fed to the output layer.
 <img src="https://github.com/ptatien0307/image_captioning/assets/79583501/fbbd005a-fb62-43c8-9940-d15b2074d63f.png" alt="drawing" width="50%" height="50%"/>
 </p>
 
+
+# Models
+<p align="center">
+<img src="https://github.com/ptatien0307/image_captioning/assets/79583501/b30f36fb-52c6-40b7-9d91-6a2ee1fdb555" alt="drawing" width="50%" height="50%"/>
+</p>
+<a style="text-align: center">Bahdanau Attention</a>
+<br/>
+
+<p align="center">
+<img src="https://github.com/ptatien0307/image_captioning/assets/79583501/f7848525-d76a-4997-a980-d3a5e3aab045" alt="drawing" width="50%" height="50%"/>
+</p>
+<a style="text-align: center">Par-Inject</a>
+<br/>
+
+
+
+
 # TODO
 * Luong Attention
 * Bahdanau Atttention
