@@ -69,4 +69,6 @@ a single vector before being fed to the output layer.
 * Teaching forcing
 
 # BLEU SCORE
-Bahdanau Attention: 0.41
+* Bahdanau Attention: 0.53
+* Luong Atttention:
+* Par-Inject
