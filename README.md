@@ -39,15 +39,26 @@ a single vector before being fed to the output layer.
 # Models
 <p align="center">
 <img src="https://github.com/ptatien0307/image_captioning/assets/79583501/b30f36fb-52c6-40b7-9d91-6a2ee1fdb555" alt="drawing" width="50%" height="50%"/>
+<br/>
 <a style="text-align: center">Bahdanau Attention</a>
 </p>
 <br/>
 
+
+<p align="center">
+<img src="https://github.com/ptatien0307/image_captioning/assets/79583501/a094347e-6033-4aff-9f95-5de21df91289" alt="drawing" width="50%" height="50%"/>
+<br/>
+<a style="text-align: center">Luong Attention</a>
+</p>
+
+
+
 <p align="center">
 <img src="https://github.com/ptatien0307/image_captioning/assets/79583501/f7848525-d76a-4997-a980-d3a5e3aab045" alt="drawing" width="50%" height="50%"/>
+<br/>
 <a style="text-align: center">Par-Inject</a>
 </p>
-<br/>
+
 
 
 
