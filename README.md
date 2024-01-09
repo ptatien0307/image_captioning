@@ -67,7 +67,9 @@ a single vector before being fed to the output layer.
 * Luong Attention
 * Bahdanau Atttention
 * Teaching forcing
-
+* Transformer
+* ViT
+  
 # BLEU SCORE
 * Bahdanau Attention: 0.53
 * Luong Atttention:
