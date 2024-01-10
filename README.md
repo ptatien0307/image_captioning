@@ -66,7 +66,6 @@ a single vector before being fed to the output layer.
 # TODO
 * Luong Attention
 * Bahdanau Atttention
-* Teaching forcing
 * Transformer
 * ViT
   
