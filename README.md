@@ -70,7 +70,7 @@ a single vector before being fed to the output layer.
 * ViT
   
 # BLEU SCORE
-* Bahdanau Attention: 0.53
-* Luong Atttention: 0.57
+* Bahdanau Attention: 
+* Luong Atttention: 
 * Transformer: 
 * Par-Inject
