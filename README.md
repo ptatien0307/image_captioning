@@ -68,9 +68,10 @@ a single vector before being fed to the output layer.
 * Bahdanau Atttention
 * Transformer
 * ViT
+* Quantization
   
 # BLEU SCORE
-* Bahdanau Attention: 
-* Luong Atttention: 
+* Bahdanau Attention: 0.55
+* Luong Atttention: 0.59
 * Transformer: 
 * Par-Inject
