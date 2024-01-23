@@ -74,4 +74,4 @@ a single vector before being fed to the output layer.
 * Bahdanau Attention: 0.55
 * Luong Atttention: 0.59
 * Transformer: 
-* Par-Inject
+* Par-Inject: 0.34
