@@ -73,6 +73,6 @@ a single vector before being fed to the output layer.
 # BLEU SCORE
 * Bahdanau Attention: 0.55
 * Luong Atttention: 0.59
-* Transformer: 
+* Transformer: 0.37
 * Par-Inject: 0.34
 * Init-Inject: 0.27
