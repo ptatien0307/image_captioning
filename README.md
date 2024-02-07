@@ -72,4 +72,5 @@ a single vector before being fed to the output layer.
 * Luong Atttention: 0.59
 * Transformer: 0.37
 * Par-Inject: 0.34
+* PI-4-LSTM: 0.39
 * Init-Inject: 0.27
