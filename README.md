@@ -4,7 +4,6 @@ Image Captioning is the task of describing the content of an image in words. Thi
 
 # Architectures
 
-
 <p align="center">
 <img src="https://github.com/ptatien0307/image_captioning/assets/79583501/98479846-a9e6-4811-8c14-67c09469cd9f.png" alt="drawing" width="75%" height="75%"/>
 </p>
@@ -36,7 +35,8 @@ a single vector before being fed to the output layer.
 </p>
 
 
-# Models
+
+# Bahdanau Attention
 <p align="center">
 <img src="https://github.com/ptatien0307/image_captioning/assets/79583501/b30f36fb-52c6-40b7-9d91-6a2ee1fdb555" alt="drawing" width="50%" height="50%"/>
 <br/>
@@ -44,6 +44,7 @@ a single vector before being fed to the output layer.
 </p>
 <br/>
 
+# Luong Attention
 
 <p align="center">
 <img src="https://github.com/ptatien0307/image_captioning/assets/79583501/a094347e-6033-4aff-9f95-5de21df91289" alt="drawing" width="50%" height="50%"/>
@@ -51,21 +52,23 @@ a single vector before being fed to the output layer.
 <a style="text-align: center">Luong Attention</a>
 </p>
 
-
-
+# Transformer
 <p align="center">
-<img src="https://github.com/ptatien0307/image_captioning/assets/79583501/f7848525-d76a-4997-a980-d3a5e3aab045" alt="drawing" width="50%" height="50%"/>
+<img src="https://github.com/ptatien0307/image_captioning/assets/79583501/c81c1875-b1c4-4f7b-b6a5-7bf3aaa5bc0d" alt="drawing" width="50%" height="50%"/>
 <br/>
-<a style="text-align: center">Par-Inject</a>
+<a style="text-align: center">Transformer Architecture</a>
 </p>
 
+In image captioning, we will use only the decoder part of the transformer for caption generation. We won't have a encoder so we replace it with a CNN model which will extract features from image and feed it into decoder as memory
 
+TODO: diagram
 
-
-
-# TODO
-* ViT
-* Quantization
+# ViT
+<p align="center">
+<img src="https://github.com/ptatien0307/image_captioning/assets/79583501/149d363e-ab27-4955-9d9b-7454d8e6147f" alt="drawing" width="50%" height="50%"/>
+<br/>
+<a style="text-align: center">Vison Transformer (ViT)</a>
+</p>
   
 # BLEU SCORE
 * Bahdanau Attention: 0.55
@@ -74,3 +77,8 @@ a single vector before being fed to the output layer.
 * Par-Inject: 0.34
 * PI-4-LSTM: 0.39
 * Init-Inject: 0.27
+
+
+# TODO
+* ViT
+* Quantization
