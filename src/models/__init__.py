@@ -1,3 +1,4 @@
 from .attention import Attention
 from .base import BaseEncoder
-from .bahdanau import Captioner
+from .bahdanau import BahdanauCaptioner
+from .luong import LuongCaptioner

@@ -1,19 +1,30 @@
 import torch
 import matplotlib.pyplot as plt
 
-from models import Captioner
+from models import BahdanauCaptioner, LuongCaptioner
 
 def load_model(path):
+    name = path.split('/')[-1][:-4]
     checkpoint = torch.load(path, map_location=torch.device('cpu'))
-
-    model = Captioner(
-        vocab_size=checkpoint['vocab_size'],
-        embed_dim=checkpoint['embed_dim'],
-        attention_dim=checkpoint['attention_dim'],
-        encoder_dim=checkpoint['encoder_dim'],
-        decoder_dim=checkpoint['decoder_dim'],
-        vocab=checkpoint['vocab']
-    )
+    match name:
+        case 'bahdanau':
+            model = BahdanauCaptioner(
+                vocab_size=checkpoint['vocab_size'],
+                embed_dim=checkpoint['embed_dim'],
+                attention_dim=checkpoint['attention_dim'],
+                encoder_dim=checkpoint['encoder_dim'],
+                decoder_dim=checkpoint['decoder_dim'],
+                vocab=checkpoint['vocab']
+            )
+        case 'luong':
+            model = LuongCaptioner(
+                vocab_size=checkpoint['vocab_size'],
+                embed_dim=checkpoint['embed_dim'],
+                attention_dim=checkpoint['attention_dim'],
+                encoder_dim=checkpoint['encoder_dim'],
+                decoder_dim=checkpoint['decoder_dim'],
+                vocab=checkpoint['vocab']
+            )
     model.load_state_dict(checkpoint['model_state_dict'])
     return model
 

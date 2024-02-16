@@ -8,6 +8,9 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 from utils import load_model, plot_result, plot_attention
 
+
+
+# Load model
 model = load_model("runs/models/bahdanau.pth")
 model.eval()
 
@@ -21,7 +24,7 @@ transform = transforms.Compose([
                                     std=[0.229, 0.224, 0.225])
             ])
 
-
+# Predict caption
 with torch.no_grad():
     image = cv2.imread('images/667626_18933d713e.jpg')
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)

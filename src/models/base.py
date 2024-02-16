@@ -1,8 +1,10 @@
 import torch
 from torch.nn import Module, Sequential
 from torchvision.models import resnet50, ResNet50_Weights
+from torch.nn import Module, Linear, LSTMCell, Dropout, Embedding
 
 from abc import ABC, abstractmethod
+from models import Attention
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 class BaseEncoder(Module, ABC):
@@ -20,3 +22,4 @@ class BaseEncoder(Module, ABC):
     @abstractmethod
     def forward(self, images):
         pass
+

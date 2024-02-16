@@ -22,10 +22,10 @@ class Decoder(Module):
         super(Decoder, self).__init__()
         self.vocab_size = vocab_size
         self.drop = Dropout(drop_prob)
-        
+
         self.embedding = Embedding(vocab_size, embed_dim).to(device)# Embedding layer
-        self.lstm = LSTMCell(input_size=embed_dim + encoder_dim, hidden_size=decoder_dim, bias=True).to(device) # LSTM layer
-        self.fcn = Linear(decoder_dim, self.vocab_size).to(device)# Linear layer
+        self.lstm = LSTMCell(input_size=embed_dim + encoder_dim,hidden_size=decoder_dim, bias=True).to(device)# LSTM layer
+        self.fcn = Linear(decoder_dim + encoder_dim, self.vocab_size).to(device)# Linear layer
 
         # Attention layer
         self.init_h = Linear(encoder_dim, decoder_dim).to(device)
@@ -45,9 +45,10 @@ class Decoder(Module):
 
         # Init hidden state
         hidden_state, cell_state = self.lstm(lstm_input, (hidden_state, cell_state))
-
+        
         # Compute output
-        output = self.fcn(self.drop(hidden_state))
+        input_linear = torch.cat((hidden_state, context), dim=1)
+        output = self.fcn(self.drop(input_linear))
 
         return output, hidden_state, cell_state, attn_weight
 
@@ -74,7 +75,7 @@ class Decoder(Module):
 
         return preds
 
-    def predict(self, feature, max_length, vocab=None):
+    def predict(self, feature, max_length, vocab):
         # Starting input
         word = torch.tensor(vocab.word2index['<SOS>']).view(1, -1).to(device)
         feature = feature.to(device)
@@ -82,7 +83,7 @@ class Decoder(Module):
         # Embedding sequence
         embeds = self.embedding(word)
 
-        captions = []
+        predicted_captions = []
         attention = []
         hidden_state, cell_state = self.init_hidden_state(feature)
 
@@ -93,7 +94,7 @@ class Decoder(Module):
 
             # Predict word index
             predicted_word_idx = output.argmax(dim=1)
-            captions.append(predicted_word_idx.item())
+            predicted_captions.append(predicted_word_idx.item())
 
             # End if <EOS> appears
             if vocab.index2word[predicted_word_idx.item()] == "<EOS>":
@@ -103,13 +104,12 @@ class Decoder(Module):
             embeds = self.embedding(predicted_word_idx.unsqueeze(0))
 
         # Convert the vocab idx to words and return sentence
-        return ' '.join([vocab.index2word[idx] for idx in captions]), attention
-    
+        return ' '.join([vocab.index2word[idx] for idx in predicted_captions]), attention
 
 
-class BahdanauCaptioner(Module):
+class LuongCaptioner(Module):
     def __init__(self, vocab_size, embed_dim, attention_dim, encoder_dim, decoder_dim, vocab):
-        super(BahdanauCaptioner, self).__init__()
+        super(LuongCaptioner, self).__init__()
         self.image_encoder =  Encoder()
         self.text_decoder = Decoder(vocab_size, embed_dim, attention_dim,
                                                  encoder_dim, decoder_dim)
