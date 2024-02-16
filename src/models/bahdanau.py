@@ -1,7 +1,8 @@
 import torch
 from torch.nn import Module, Linear, LSTMCell, Dropout, Embedding
-
-from models import AttentionEncoder, Attention
+from .modules.attention import Attention
+from .modules.base import AttentionEncoder
+# from .modules import AttentionEncoder, Attention
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
     
 class Decoder(Module):

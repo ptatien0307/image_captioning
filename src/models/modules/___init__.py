@@ -1,3 +1,3 @@
 from .attention import Attention
-from .base import AttentionEncoder, NormalEncoder
+from .base import AttentionEncoder
 from .pos import PositionalEncoding

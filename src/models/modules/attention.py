@@ -1,6 +1,6 @@
 import torch
-from torch.nn import Module, Linear
 import torch.nn.functional as F
+from torch.nn import Module, Linear
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 

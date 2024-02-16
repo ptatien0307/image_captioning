@@ -1,7 +1,7 @@
 import torch
 from torch.nn import Module, Linear, LSTM, Dropout, Embedding
-
-from models import NormalEncoder
+from .modules.base import NormalEncoder
+# from .modules import NormalEncoder
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 

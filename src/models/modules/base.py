@@ -1,10 +1,8 @@
 import torch
 from torch.nn import Module, Sequential
+from torch.nn import Module, Linear
 from torchvision.models import resnet50, ResNet50_Weights
-from torch.nn import Module, Linear, LSTMCell, Dropout, Embedding
 
-from abc import ABC, abstractmethod
-from models import Attention
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 class AttentionEncoder(Module):
@@ -20,7 +18,6 @@ class AttentionEncoder(Module):
             param.requires_grad = False
 
     def forward(self, images):
-        # Preprocess images
         images = images.to(device)
 
         features = self.model(images)                                       # (batch_size, 2048, 7, 7)
@@ -28,9 +25,7 @@ class AttentionEncoder(Module):
         features = features.view(features.size(0), -1, features.size(-1))   # (batch_size, 49, 2048)
         return features
 
-
-
-class NormalEncoder(Module, ABC):
+class NormalEncoder(Module):
     def __init__(self, encoder_dim):
         super(NormalEncoder, self).__init__()
         self.encoder_dim = encoder_dim
@@ -58,3 +53,24 @@ class NormalEncoder(Module, ABC):
         features = features.squeeze(1)                    # (batch_size, 512)
         return features
 
+class TransformerEncoder(Module):
+    def __init__(self, encoder_dim, d_model):
+        super(TransformerEncoder, self).__init__()
+
+        # Load pretrained model and remove last fc layer
+        pretrained_model = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1)
+        self.model = Sequential(*list(pretrained_model.children())[:-2]).to(device)
+
+        # Freeze layer
+        for param in self.model.parameters():
+            param.requires_grad = False
+
+        self.linear = Linear(encoder_dim, d_model).to(device)
+    def forward(self, images):
+        images = images.to(device)
+
+        features = self.model(images)
+        features = features.view(features.size(0), features.size(1), -1)
+        features = features.permute(0, 2, 1)
+        features = self.linear(features)
+        return features # (batch_size, 49, d_model)
