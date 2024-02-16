@@ -1,22 +1,9 @@
 import torch
 from torch.nn import Module, Linear, LSTMCell, Dropout, Embedding
 
-from models import BaseEncoder, Attention
+from models import AttentionEncoder, Attention
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-
-class Encoder(BaseEncoder):
-    def forward(self, images):
-        # Preprocess images
-        images = images.to(device)
-
-        features = self.model(images)                                       # (batch_size, 2048, 7, 7)
-        features = features.permute(0, 2, 3, 1)                             # (batch_size, 7, 7, 2048)
-        features = features.view(features.size(0), -1, features.size(-1))   # (batch_size, 49, 2048)
-        return features
     
-
-
 class Decoder(Module):
     def __init__(self, vocab_size, embed_dim, attention_dim, encoder_dim, decoder_dim, drop_prob=0.3):
         super(Decoder, self).__init__()
@@ -110,7 +97,7 @@ class Decoder(Module):
 class BahdanauCaptioner(Module):
     def __init__(self, vocab_size, embed_dim, attention_dim, encoder_dim, decoder_dim, vocab):
         super(BahdanauCaptioner, self).__init__()
-        self.image_encoder =  Encoder()
+        self.image_encoder =  AttentionEncoder()
         self.text_decoder = Decoder(vocab_size, embed_dim, attention_dim,
                                                  encoder_dim, decoder_dim)
         self.vocab = vocab

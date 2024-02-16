@@ -11,7 +11,7 @@ from utils import load_model, plot_result, plot_attention
 
 
 # Load model
-model = load_model("runs/models/bahdanau.pth")
+model = load_model("runs/models/luong.pth")
 model.eval()
 
 
