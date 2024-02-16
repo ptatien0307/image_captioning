@@ -100,7 +100,7 @@ TODO: diagram
     </thead>
     <tbody>
         <tr>
-            <td rowspan=5>
+            <td rowspan=5 width=50%>
               <p align="center">
                 <img src="https://github.com/ptatien0307/image_captioning/assets/79583501/bcec898f-4d43-4711-861b-fc686b514ba8" alt="drawing" width="100%" height="100%"/>
               </p>
@@ -119,6 +119,46 @@ TODO: diagram
         <tr>
             <td>Par-Inject-4LSTM</td>
             <td>a girl in a bikini lying on her back in shallow water</td>
+        </tr>
+        <tr>
+            <td>Init-Inject</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Model</th>
+            <th>Generated caption</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=5 width=50%>
+              <p align="center">
+                <img src="https://github.com/ptatien0307/image_captioning/assets/79583501/938b4441-1665-473e-ad13-65ddcfb14241" alt="drawing" width="100%" height="100%"/>
+              </p>
+            </td>
+            <td>Bahdanau</td>
+            <td>a man and a girl horse and a horse is standing next to a fire</td>
+        </tr>
+        <tr>
+            <td>Luong</td>
+            <td>a man and a woman are standing on a fire with a fire in the background</td>
+        </tr>
+        <tr>
+            <td>Transformer</td>
+            <td>a man and a female stand around a fire</td>
+        </tr>
+        <tr>
+            <td>Par-Inject-4LSTM</td>
+            <td>a dog is running in a field of a field</td>
         </tr>
         <tr>
             <td>Init-Inject</td>
