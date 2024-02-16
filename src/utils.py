@@ -1,7 +1,10 @@
 import torch
 import matplotlib.pyplot as plt
+from torchvision import transforms
+from torch.utils.data import DataLoader
 
 from .models import BahdanauCaptioner, LuongCaptioner, ParInjectCaptioner, InitInjectCaptioner, TransformerCaptioner
+from .dataset import ImageCaptioningDataset, CapsCollate
 
 def load_model(path):
     name = path.split('/')[-1][:-4]
@@ -55,6 +58,30 @@ def load_model(path):
             )
     model.load_state_dict(checkpoint['model_state_dict'])
     return model
+
+def get_dataset_dataloader(path, batch_size):
+    transform = transforms.Compose([
+                        transforms.ToTensor(),
+                        transforms.Resize(232, antialias=True),
+                        transforms.CenterCrop(224),
+                        transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                            std=[0.229, 0.224, 0.225])
+                ])
+
+    dataset = ImageCaptioningDataset(
+                        csv_file=path,
+                        transform=transform)
+
+    loader = DataLoader(
+                    dataset=dataset,
+                    batch_size=batch_size,
+                    shuffle=True,
+                    num_workers=2,
+                    collate_fn=CapsCollate(pad_idx=dataset.vocab.word2index["<PAD>"], batch_first=True))
+
+    return dataset, loader
+
+
 
 def plot_result(image, caption):
     plt.imshow(image)
