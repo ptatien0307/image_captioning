@@ -92,8 +92,6 @@ class Decoder(Module):
         # Convert the vocab idx to words and return sentence
         return ' '.join([vocab.index2word[idx] for idx in captions]), attention
     
-
-
 class BahdanauCaptioner(Module):
     def __init__(self, vocab_size, embed_dim, attention_dim, encoder_dim, decoder_dim, vocab):
         super(BahdanauCaptioner, self).__init__()

@@ -11,7 +11,7 @@ from utils import load_model, plot_result, plot_attention
 
 
 # Load model
-model = load_model("runs/models/luong.pth")
+model = load_model("runs/models/init_inject.pth")
 model.eval()
 
 
@@ -29,6 +29,6 @@ with torch.no_grad():
     image = cv2.imread('images/667626_18933d713e.jpg')
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image_input = transform(image).unsqueeze(0)
-    caption, context = model.generate_caption(image_input)
+    caption = model.generate_caption(image_input)
 
     plot_result(image, caption)

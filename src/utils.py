@@ -1,7 +1,7 @@
 import torch
 import matplotlib.pyplot as plt
 
-from models import BahdanauCaptioner, LuongCaptioner, ParInjectCaptioner
+from models import BahdanauCaptioner, LuongCaptioner, ParInjectCaptioner, InitInjectCaptioner
 
 def load_model(path):
     name = path.split('/')[-1][:-4]
@@ -34,7 +34,15 @@ def load_model(path):
                 decoder_dim=checkpoint['decoder_dim'],
                 num_layers=checkpoint['num_layers'],
             )
-
+        case 'init_inject':
+            model = InitInjectCaptioner(
+                vocab_size=checkpoint['vocab_size'],
+                vocab=checkpoint['vocab'],
+                embed_dim=checkpoint['embed_dim'],
+                encoder_dim=checkpoint['encoder_dim'],
+                decoder_dim=checkpoint['decoder_dim'],
+                num_layers=checkpoint['num_layers'],
+            )
     model.load_state_dict(checkpoint['model_state_dict'])
     return model
 
