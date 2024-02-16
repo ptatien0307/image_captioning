@@ -88,3 +88,41 @@ TODO: diagram
 # TODO
 * ViT
 * Quantization
+
+# Sample
+<table>
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Model</th>
+            <th>Generated caption</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=5>
+              <p align="center">
+                <img src="https://github.com/ptatien0307/image_captioning/assets/79583501/bcec898f-4d43-4711-861b-fc686b514ba8" alt="drawing" width="100%" height="100%"/>
+              </p>
+            </td>
+            <td>Bahdanau</td>
+            <td>a girl in a pink swimsuit is laying in the water</td>
+        </tr>
+        <tr>
+            <td>Luong</td>
+            <td>a girl is stretched out in shallow water</td>
+        </tr>
+        <tr>
+            <td>Transformer</td>
+            <td>a man in a red shirt is riding a skateboard in a pool</td>
+        </tr>
+        <tr>
+            <td>Par-Inject-4LSTM</td>
+            <td>a girl in a bikini lying on her back in shallow water</td>
+        </tr>
+        <tr>
+            <td>Init-Inject</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
