@@ -11,9 +11,15 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import FastAPI, Request, UploadFile, File
-from src.dataset import Vocabulary
 from src.utils import load_model
+from src.dataset import Vocabulary
 
+
+app = FastAPI()
+app.mount("/images", StaticFiles(directory="images"), name="images")
+templates = Jinja2Templates(directory='templates')
+model = load_model("runs/models/transformer.pth")
+model.eval()
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 transform = transforms.Compose([
                 transforms.ToTensor(),
@@ -22,14 +28,6 @@ transform = transforms.Compose([
                 transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                     std=[0.229, 0.224, 0.225])
             ])
-
-
-
-app = FastAPI()
-app.mount("/images", StaticFiles(directory="images"), name="images")
-templates = Jinja2Templates(directory='templates')
-
-
 
 @app.get('/', response_class=HTMLResponse)
 def home(request: Request):
@@ -44,8 +42,7 @@ async def create_upload_file(request: Request, files: List[UploadFile]=File(...)
         # save the file
         with open("images/uploaded_image.jpg", "wb") as f:
             f.write(contents)
-    model = load_model("runs/models/transformer.pth")
-    model.eval()
+
 
     # Predict caption
     with torch.no_grad():
@@ -58,9 +55,7 @@ async def create_upload_file(request: Request, files: List[UploadFile]=File(...)
                                                      "image": 'uploaded_image.jpg',
                                                      'caption': caption})
 
-
 if __name__ == '__main__':
-
 
 
     uvicorn.run(app, host="127.0.0.1", port=8000)
