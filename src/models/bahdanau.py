@@ -3,7 +3,6 @@ from torch.nn import Module, Linear, LSTMCell, Dropout, Embedding
 from .modules.attention import Attention
 from .modules.base import AttentionEncoder
 # from .modules import AttentionEncoder, Attention
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
     
 class Decoder(Module):
     def __init__(self, vocab_size, embed_dim, attention_dim, encoder_dim, decoder_dim, drop_prob=0.3):
@@ -11,13 +10,13 @@ class Decoder(Module):
         self.vocab_size = vocab_size
         self.drop = Dropout(drop_prob)
         
-        self.embedding = Embedding(vocab_size, embed_dim).to(device)# Embedding layer
-        self.lstm = LSTMCell(input_size=embed_dim + encoder_dim, hidden_size=decoder_dim, bias=True).to(device) # LSTM layer
-        self.fcn = Linear(decoder_dim, self.vocab_size).to(device)# Linear layer
+        self.embedding = Embedding(vocab_size, embed_dim) # Embedding layer
+        self.lstm = LSTMCell(input_size=embed_dim + encoder_dim, hidden_size=decoder_dim, bias=True) # LSTM layer
+        self.fcn = Linear(decoder_dim, self.vocab_size) # Linear layer
 
         # Attention layer
-        self.init_h = Linear(encoder_dim, decoder_dim).to(device)
-        self.init_c = Linear(encoder_dim, decoder_dim).to(device)
+        self.init_h = Linear(encoder_dim, decoder_dim)
+        self.init_c = Linear(encoder_dim, decoder_dim)
         self.attention = Attention(attention_dim, encoder_dim, decoder_dim)
 
     def init_hidden_state(self, features):
@@ -34,18 +33,13 @@ class Decoder(Module):
         # Init hidden state
         hidden_state, cell_state = self.lstm(lstm_input, (hidden_state, cell_state))
 
-        # Compute output
+        # Ouutput
         output = self.fcn(self.drop(hidden_state))
-
         return output, hidden_state, cell_state, attn_weight
 
     def forward(self, features, sequences):
-        # Sequence
-        sequence_length = len(sequences[0]) - 1
-        sequences = sequences.to(device)
-
-        # Prediction store
-        preds = torch.zeros(sequences.shape[0], sequence_length, self.vocab_size).to(device)
+        sequence_length = len(sequences[0]) - 1 # Sequence length
+        preds = torch.zeros(sequences.shape[0], sequence_length, self.vocab_size) # Prediction store
 
         # Embedding sequence
         embeds = self.embedding(sequences)
@@ -63,12 +57,8 @@ class Decoder(Module):
         return preds
 
     def predict(self, feature, max_length, vocab=None):
-        # Starting input
-        word = torch.tensor(vocab.word2index['<SOS>']).view(1, -1).to(device)
-        feature = feature.to(device)
-
-        # Embedding sequence
-        embeds = self.embedding(word)
+        word = torch.tensor(vocab.word2index['<SOS>']).view(1, -1) # Starting input
+        embeds = self.embedding(word) # Embedding sequence
 
         captions = []
         attention = []
@@ -109,7 +99,6 @@ class BahdanauCaptioner(Module):
         return output
 
     def generate_caption(self, image, max_length=20):
-        image = image.to(device)
         feature = self.image_encoder(image)
         predicted_caption, attn_weights = self.text_decoder.predict(feature, max_length, self.vocab)
 

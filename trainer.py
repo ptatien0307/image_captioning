@@ -32,7 +32,7 @@ class Trainer():
             encoder_dim=self.encoder_dim,
             decoder_dim=self.decoder_dim,
             num_layers=self.num_layers
-        )
+        ).to(device)
         optimizer = torch.optim.Adam(model.parameters(), lr=3e-4)
         criterion = torch.nn.CrossEntropyLoss(ignore_index=self.train_dataset.vocab.word2index["<PAD>"])
 
@@ -44,25 +44,19 @@ class Trainer():
             model_state, optimizer_state, prev_epoch, prev_loss = self.load_model()
             model.load_state_dict(model_state)
             optimizer.load_state_dict(optimizer_state)
-
-            # Starting epoch
-            start_epoch = prev_epoch
+            start_epoch = prev_epoch # Starting epoch
 
 
         for epoch in range(start_epoch + 1, self.num_epochs + 1):
-
             model.train()
             train_epoch_loss = []
             train_pbar = tqdm(enumerate(iter(self.train_loader)), position=0, leave=True)
 
             for idx, (image, captions) in train_pbar:
                 image, captions = image.to(device), captions.to(device)
-
-                # Zero the gradients
-                optimizer.zero_grad()
-
-                # Feed forward
-                outputs = model(image, captions)
+                
+                optimizer.zero_grad() # Zero the gradients
+                outputs = model(image, captions) # Feed forward
 
                 # Calculate the loss
                 targets = captions[:, 1:]
@@ -87,8 +81,7 @@ class Trainer():
         for idx, (image, captions) in test_pbar:
             image, captions = image.to(device), captions.to(device)
 
-            # Feed forward
-            outputs = model(image, captions)
+            outputs = model(image, captions) # Feed forward
 
             # Calculate the loss
             targets = captions[:, 1:]
@@ -97,6 +90,7 @@ class Trainer():
 
             # Show progess bar
             test_pbar.set_postfix_str(f"{epoch}/{self.num_epochs} - Testing loss: {sum(test_epoch_loss) / len(test_epoch_loss):0.4f}")
+
         # Save model
         avg_test_epoch_loss = sum(test_epoch_loss) / len(test_epoch_loss)
         self.save_model(model, optimizer, epoch, avg_test_epoch_loss)

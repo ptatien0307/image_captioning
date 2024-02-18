@@ -10,6 +10,7 @@ if __name__ == '__main__':
 
     # Load model
     model = load_model("runs/models/transformer.pth")
+    model = model.to(device)
     model.eval()
 
     transform = transforms.Compose([
@@ -24,7 +25,7 @@ if __name__ == '__main__':
     with torch.no_grad():
         image = cv2.imread('images/667626_18933d713e.jpg')
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        image_input = transform(image).unsqueeze(0)
+        image_input = transform(image).unsqueeze(0).to(device)
         caption = model.generate_caption(image_input)
 
         plot_result(image, caption)

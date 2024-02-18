@@ -2,7 +2,6 @@ import torch
 from torch.nn import Module, Linear, LSTM, Dropout, Embedding
 from .modules.base import NormalEncoder
 # from .modules import NormalEncoder
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
 class Decoder(Module):
@@ -13,7 +12,7 @@ class Decoder(Module):
         self.decoder_dim = decoder_dim
         self.num_layers = num_layers
 
-        self.embedding = Embedding(vocab_size, embed_dim).to(device) # Embedding layer
+        self.embedding = Embedding(vocab_size, embed_dim) # Embedding layer
 
         # LSTM layer
         self.lstm = LSTM(input_size=embed_dim + encoder_dim,
@@ -21,16 +20,16 @@ class Decoder(Module):
                                   bias=True,
                                   batch_first=True,
                                   num_layers=self.num_layers,
-                                  bidirectional=False).to(device)
+                                  bidirectional=False)
 
         # Linear layer
-        self.linear1 = Linear(decoder_dim, decoder_dim).to(device)
-        self.linear2 = Linear(decoder_dim, vocab_size).to(device)
+        self.linear1 = Linear(decoder_dim, decoder_dim)
+        self.linear2 = Linear(decoder_dim, vocab_size)
         self.drop = Dropout(0.3)
 
     def init_hidden_state(self, features):
-        hidden = torch.zeros(self.num_layers, features.size(0), self.decoder_dim).to(device)
-        cell = torch.zeros(self.num_layers, features.size(0), self.decoder_dim).to(device)
+        hidden = torch.zeros(self.num_layers, features.size(0), self.decoder_dim)
+        cell = torch.zeros(self.num_layers, features.size(0), self.decoder_dim)
         return hidden, cell
 
     def forward_step(self, features, embed_words):
@@ -53,8 +52,7 @@ class Decoder(Module):
 
     def forward(self, features, sequences):
         # Embedding sequence
-        sequence_length = len(sequences[0]) - 1
-        sequences = sequences[:, :-1].to(device)
+        sequences = sequences[:, :-1]
         embed_words = self.embedding(sequences)
         embed_words = embed_words.to(torch.float32)
 
@@ -64,9 +62,8 @@ class Decoder(Module):
 
     def predict(self, feature, max_length, vocab):
         # Embedding sequence
-        word = torch.tensor(vocab.word2index['<SOS>']).view(1, -1).to(device)
+        word = torch.tensor(vocab.word2index['<SOS>']).view(1, -1)
         embed_words = self.embedding(word)
-        feature = feature.to(device)
 
         captions = []
         for idx in range(max_length):

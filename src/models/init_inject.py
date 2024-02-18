@@ -2,8 +2,6 @@ import torch
 from torch.nn import Module, Linear, LSTM, Dropout, Embedding
 from .modules.base import NormalEncoder
 # from .modules import NormalEncoder
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
 
 class Decoder(torch.nn.Module):
     def __init__(self, vocab_size, embed_dim, encoder_dim, decoder_dim, num_layers):
@@ -15,7 +13,7 @@ class Decoder(torch.nn.Module):
 
 
         # Embedding layer
-        self.embedding = torch.nn.Embedding(vocab_size, embed_dim).to(device)
+        self.embedding = torch.nn.Embedding(vocab_size, embed_dim)
 
         # LSTM layer
         self.lstm = torch.nn.LSTM(input_size=embed_dim,
@@ -23,11 +21,11 @@ class Decoder(torch.nn.Module):
                                   bias=True,
                                   batch_first=True,
                                   num_layers=self.num_layers,
-                                  bidirectional=False).to(device)
+                                  bidirectional=False)
 
         # Linear layer
-        self.linear1 = torch.nn.Linear(decoder_dim, decoder_dim).to(device)
-        self.linear2 = torch.nn.Linear(decoder_dim, vocab_size).to(device)
+        self.linear1 = torch.nn.Linear(decoder_dim, decoder_dim)
+        self.linear2 = torch.nn.Linear(decoder_dim, vocab_size)
         self.drop = torch.nn.Dropout(0.3)
 
     def init_hidden_state(self, features):
@@ -50,8 +48,7 @@ class Decoder(torch.nn.Module):
 
     def forward(self, features, sequences):
         # Embedding sequence
-        sequence_length = len(sequences[0]) - 1
-        sequences = sequences[:, :-1].to(device)
+        sequences = sequences[:, :-1]
         embed_words = self.embedding(sequences)
         embed_words = embed_words.to(torch.float32)
 
@@ -61,9 +58,8 @@ class Decoder(torch.nn.Module):
 
     def predict(self, feature, max_length, vocab):
         # Embedding sequence
-        word = torch.tensor(vocab.word2index['<SOS>']).view(1, -1).to(device)
+        word = torch.tensor(vocab.word2index['<SOS>']).view(1, -1)
         embed_words = self.embedding(word)
-        feature = feature.to(device)
 
         captions = []
         for idx in range(max_length):
