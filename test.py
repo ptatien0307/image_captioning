@@ -9,7 +9,7 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 if __name__ == '__main__':
 
     # Load model
-    model = load_model("runs/models/transformer.pth")
+    model = load_model("runs/models/init_inject.pth")
     model = model.to(device)
     model.eval()
 

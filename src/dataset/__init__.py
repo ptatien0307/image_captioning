@@ -1,2 +1,2 @@
 from .vocabulary import Vocabulary
-from .dataset import ImageCaptioningDataset, CapsCollate
+from .dataset import ImageCaptioningDataset

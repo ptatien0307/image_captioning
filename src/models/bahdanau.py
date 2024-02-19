@@ -38,7 +38,7 @@ class Decoder(Module):
         return output, hidden_state, cell_state, attn_weight
 
     def forward(self, features, sequences):
-        sequence_length = len(sequences[0]) - 1 # Sequence length
+        sequence_length = len(sequences[0]) # Sequence length
         preds = torch.zeros(sequences.shape[0], sequence_length, self.vocab_size) # Prediction store
 
         # Embedding sequence

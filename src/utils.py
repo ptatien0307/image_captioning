@@ -4,7 +4,7 @@ from torchvision import transforms
 from torch.utils.data import DataLoader
 
 from .models import BahdanauCaptioner, LuongCaptioner, ParInjectCaptioner, InitInjectCaptioner, TransformerCaptioner
-from .dataset import ImageCaptioningDataset, CapsCollate
+from .dataset import ImageCaptioningDataset
 
 def load_model(path):
     name = path.split('/')[-1][:-4]
