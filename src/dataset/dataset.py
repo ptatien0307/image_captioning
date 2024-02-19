@@ -7,27 +7,13 @@ from torch.nn.utils.rnn import pad_sequence
 
 from .vocabulary import Vocabulary
 
-
-class CapsCollate:
-    def __init__(self, pad_idx, batch_first=False):
-        self.pad_idx = pad_idx
-        self.batch_first = batch_first
-
-    def __call__(self, batch):
-        imgs = [item[0].unsqueeze(0) for item in batch]
-
-        imgs = torch.cat(imgs, dim=0)
-
-        targets = [item[1] for item in batch]
-        targets = pad_sequence(targets, batch_first=self.batch_first, padding_value=self.pad_idx)
-        return imgs, targets
-
 class ImageCaptioningDataset(Dataset):
     """Image Captioning dataset"""
 
-    def __init__(self, csv_file, transform, freq_threshold=5):
+    def __init__(self, csv_file, transform, max_length, freq_threshold=5):
         self.dataframe = pd.read_csv(csv_file)
         self.transform = transform
+        self.max_length = max_length
 
         self.images = self.dataframe['image']
         self.captions = self.dataframe['caption']
@@ -49,9 +35,22 @@ class ImageCaptioningDataset(Dataset):
         if self.transform:
             image = self.transform(image)
 
-        caption_vec = []
-        caption_vec += [self.vocab.word2index["<SOS>"]]
-        caption_vec += self.vocab.numericalize(caption)
-        caption_vec += [self.vocab.word2index["<EOS>"]]
+        # Tokenize caption
+        caption_tokens = []
+        caption_tokens += [self.vocab.word2index["<SOS>"]]
+        caption_tokens += self.vocab.numericalize(caption)
+        caption_tokens += [self.vocab.word2index["<EOS>"]]
 
-        return image, torch.tensor(caption_vec)
+        input_tokens = caption_tokens[:-1].copy() # input
+        target_tokens = caption_tokens[1:].copy() # target
+
+        # Padding input tokens
+        cap_length = len(input_tokens)
+        padding_size = self.max_length - cap_length
+        input_tokens += [0] * padding_size
+        target_tokens += [0] * padding_size
+
+        input_tokens = torch.tensor(input_tokens) # input
+        target_tokens = torch.tensor(target_tokens) # target
+
+        return image, input_tokens, target_tokens
