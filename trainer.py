@@ -52,8 +52,8 @@ class Trainer():
             train_epoch_loss = []
             train_pbar = tqdm(enumerate(iter(self.train_loader)), position=0, leave=True)
 
-            for idx, (image, captions) in train_pbar:
-                image, captions = image.to(device), captions.to(device)
+            for idx, (image, captions, targets) in train_pbar:
+                image, captions, targets = image.to(device), captions.to(device), targets.to(device)
                 
                 optimizer.zero_grad() # Zero the gradients
                 outputs = model(image, captions) # Feed forward
