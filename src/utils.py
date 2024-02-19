@@ -1,6 +1,5 @@
 import torch
 import matplotlib.pyplot as plt
-from torchvision import transforms
 from torch.utils.data import DataLoader
 
 from .models import BahdanauCaptioner, LuongCaptioner, ParInjectCaptioner, InitInjectCaptioner, TransformerCaptioner
@@ -59,15 +58,7 @@ def load_model(path):
     model.load_state_dict(checkpoint['model_state_dict'])
     return model
 
-def get_dataset_dataloader(path, batch_size):
-    transform = transforms.Compose([
-                        transforms.ToTensor(),
-                        transforms.Resize(232, antialias=True),
-                        transforms.CenterCrop(224),
-                        transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                            std=[0.229, 0.224, 0.225])
-                ])
-
+def get_dataset_dataloader(path, transform, batch_size):
     dataset = ImageCaptioningDataset(
                         csv_file=path,
                         transform=transform)
@@ -76,8 +67,7 @@ def get_dataset_dataloader(path, batch_size):
                     dataset=dataset,
                     batch_size=batch_size,
                     shuffle=True,
-                    num_workers=2,
-                    collate_fn=CapsCollate(pad_idx=dataset.vocab.word2index["<PAD>"], batch_first=True))
+                    num_workers=2)
 
     return dataset, loader
 

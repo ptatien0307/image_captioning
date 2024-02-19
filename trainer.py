@@ -34,10 +34,8 @@ class Trainer():
             num_layers=self.num_layers
         ).to(device)
         optimizer = torch.optim.Adam(model.parameters(), lr=3e-4)
-        criterion = torch.nn.CrossEntropyLoss(ignore_index=self.train_dataset.vocab.word2index["<PAD>"])
-
-        # Starting epoch
-        start_epoch = 0
+        criterion = torch.nn.CrossEntropyLoss(ignore_index=0) # 0: <PAD>
+        start_epoch = 0 # Starting epoch
 
         if resume:
             # Load model and optimizer state
@@ -45,7 +43,6 @@ class Trainer():
             model.load_state_dict(model_state)
             optimizer.load_state_dict(optimizer_state)
             start_epoch = prev_epoch # Starting epoch
-
 
         for epoch in range(start_epoch + 1, self.num_epochs + 1):
             model.train()
@@ -78,13 +75,13 @@ class Trainer():
         model.eval()
         test_pbar = tqdm(enumerate(iter(self.test_loader)), position=0, leave=True)
         test_epoch_loss = []
-        for idx, (image, captions) in test_pbar:
-            image, captions = image.to(device), captions.to(device)
+        
+        for idx, (image, captions, targets) in test_pbar:
+            image, captions, targets = image.to(device), captions.to(device), targets.to(device)
 
             outputs = model(image, captions) # Feed forward
 
             # Calculate the loss
-            targets = captions[:, 1:]
             loss = criterion(outputs.view(-1, self.vocab_size), targets.reshape(-1))
             test_epoch_loss.append(loss.item())
 
