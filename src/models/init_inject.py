@@ -48,7 +48,6 @@ class Decoder(torch.nn.Module):
 
     def forward(self, features, sequences):
         # Embedding sequence
-        sequences = sequences[:, :-1]
         embed_words = self.embedding(sequences)
         embed_words = embed_words.to(torch.float32)
 
