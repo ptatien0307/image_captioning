@@ -6,110 +6,76 @@ from src.models import BahdanauCaptioner, LuongCaptioner, ParInjectCaptioner, In
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 class Trainer():
-    def __init__(self):
+    def __init__(self, config, dataset, loader, model, optimizer, criterion):
+        self.config = config
+        self.dataset = dataset
+        self.loader = loader
+        self.vocab_size = len(self.dataset.vocab)
+        self.vocab = self.dataset.vocab
 
-        self.batch_size = 32
-        self.num_epochs = 50
+        self.model = model.to(device)
+        self.optimizer = optimizer
+        self.criterion = criterion
 
-        self.embed_dim = 300
-        self.encoder_dim = 512
-        self.decoder_dim = 512
-        self.num_layers = 4
+    def run_epoch(self, epoch):
+        self.model.train()
+        epoch_loss = []
+        pbar = tqdm(enumerate(iter(self.loader)), position=0, leave=True)
 
+        for idx, (image, captions, targets) in pbar:
+            image, captions, targets = image.to(device), captions.to(device), targets.to(device)
 
-        self.train_dataset, self.train_loader = get_dataset_dataloader("dataset/train.csv", self.batch_size)
-        self.test_dataset, self.test_loader = get_dataset_dataloader("dataset/test.csv", self.batch_size)
+            self.optimizer.zero_grad() # Zero the gradients
+            outputs = self.model(image, captions) # Forward
 
-        self.vocab_size = len(self.train_dataset.vocab)
-        self.vocab = self.train_dataset.vocab
+            # Calculate loss
+            loss = self.criterion(outputs.view(-1, self.vocab_size), targets.reshape(-1))
+            epoch_loss.append(loss.item())
+
+            # Backward and update params
+            loss.backward()
+            self.optimizer.step()
+
+            # Show progess bar
+            pbar.set_postfix_str(f"Epoch: {epoch}/{self.config.num_epochs} - Loss: {sum(epoch_loss) / len(epoch_loss):0.4f}")
 
     def train(self, resume=False):
-        # Init model, optimizer, criterion
-        model = InitInjectCaptioner(
-            vocab_size=self.vocab_size,
-            embed_dim=self.embed_dim,
-            vocab=self.train_dataset.vocab,
-            encoder_dim=self.encoder_dim,
-            decoder_dim=self.decoder_dim,
-            num_layers=self.num_layers
-        ).to(device)
-        optimizer = torch.optim.Adam(model.parameters(), lr=3e-4)
-        criterion = torch.nn.CrossEntropyLoss(ignore_index=0) # 0: <PAD>
-        start_epoch = 0 # Starting epoch
-
+        start_epoch = 0
         if resume:
             # Load model and optimizer state
             model_state, optimizer_state, prev_epoch, prev_loss = self.load_model()
-            model.load_state_dict(model_state)
-            optimizer.load_state_dict(optimizer_state)
+            self.model.load_state_dict(model_state)
+            self.optimizer.load_state_dict(optimizer_state)
             start_epoch = prev_epoch # Starting epoch
 
-        for epoch in range(start_epoch + 1, self.num_epochs + 1):
-            model.train()
-            train_epoch_loss = []
-            train_pbar = tqdm(enumerate(iter(self.train_loader)), position=0, leave=True)
+        for epoch in range(start_epoch + 1, self.config.num_epochs + 1):
+            epoch_loss = self.run_epoch(epoch)
+            
+            # Save model
+            avg_epoch_loss = sum(epoch_loss) / len(epoch_loss)
+            self.save_model(self.model, self.optimizer, epoch, avg_epoch_loss)
 
-            for idx, (image, captions, targets) in train_pbar:
-                image, captions, targets = image.to(device), captions.to(device), targets.to(device)
-                
-                optimizer.zero_grad() # Zero the gradients
-                outputs = model(image, captions) # Feed forward
-
-                # Calculate the loss
-                targets = captions[:, 1:]
-                loss = criterion(outputs.view(-1, self.vocab_size), targets.reshape(-1))
-                train_epoch_loss.append(loss.item())
-
-                # Backward and update params
-                loss.backward()
-                optimizer.step()
-
-                # Show progess bar
-                train_pbar.set_postfix_str(f"{epoch}/{self.num_epochs} - Training loss: {sum(train_epoch_loss) / len(train_epoch_loss):0.4f}")
-
-            # Test and save model
-            self.test(model, optimizer, epoch, criterion)
-
-
-    def test(self, model, optimizer, epoch, criterion):
-        model.eval()
-        test_pbar = tqdm(enumerate(iter(self.test_loader)), position=0, leave=True)
-        test_epoch_loss = []
-        
-        for idx, (image, captions, targets) in test_pbar:
-            image, captions, targets = image.to(device), captions.to(device), targets.to(device)
-
-            outputs = model(image, captions) # Feed forward
-
-            # Calculate the loss
-            loss = criterion(outputs.view(-1, self.vocab_size), targets.reshape(-1))
-            test_epoch_loss.append(loss.item())
-
-            # Show progess bar
-            test_pbar.set_postfix_str(f"{epoch}/{self.num_epochs} - Testing loss: {sum(test_epoch_loss) / len(test_epoch_loss):0.4f}")
-
-        # Save model
-        avg_test_epoch_loss = sum(test_epoch_loss) / len(test_epoch_loss)
-        self.save_model(model, optimizer, epoch, avg_test_epoch_loss)
 
     def save_model(self, model, optimizer, epoch, loss):
         model_state = {
             'epoch': epoch,
             'loss': loss,
-            'vocab_size': self.vocab_size,
-            'vocab': self.vocab,
-            'embed_dim': self.embed_dim,
-            'encoder_dim': self.encoder_dim,
-            'decoder_dim': self.decoder_dim,
-            'num_layers': self.num_layers,
             'model_state_dict': model.state_dict(),
-            'optimizer_state_dict': optimizer.state_dict()
+            'optimizer_state_dict': optimizer.state_dict(),
+
+            'vocab': self.vocab,
+            'vocab_size': self.vocab_size,
+
+            'embed_dim': self.config.embedding_dim,
+            'encoder_dim': self.config.encoder_dim,
+            'decoder_dim': self.config.decoder_dim,
+            'num_layers': self.config.num_layers,
         }
 
-        torch.save(model_state, f'runs/models/init_inject.pth')
+        torch.save(model_state, f'models/init_inject_4lstm/model_best.pth')
 
     def load_model(self):
-        checkpoint = torch.load("runs/models/init_inject.pth")
+        checkpoint = torch.load("models/init_inject_4lstm/model_best.pth")
 
         epoch = checkpoint['epoch']
         loss = checkpoint['loss']

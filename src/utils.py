@@ -58,18 +58,20 @@ def load_model(path):
     model.load_state_dict(checkpoint['model_state_dict'])
     return model
 
-def get_dataset_dataloader(path, transform, batch_size):
+def get_dataset_dataloader(file, transform, batch_size, max_length, freq_threshold):
     dataset = ImageCaptioningDataset(
-                        csv_file=path,
-                        transform=transform)
+                        csv_file=file,
+                        transform=transform,
+                        max_length=max_length,
+                        freq_threshold=freq_threshold)
 
-    loader = DataLoader(
+    dataloader = DataLoader(
                     dataset=dataset,
                     batch_size=batch_size,
                     shuffle=True,
                     num_workers=2)
 
-    return dataset, loader
+    return dataset, dataloader
 
 
 
