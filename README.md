@@ -78,14 +78,15 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
 
 <div align="center">
   
-| Model                |   bleu-4   |  bleu-3 | bleu-2 |  bleu-1 | 
-|----------------------|:----------:|:-------:|:------:|:-------:|
-| Bahdanau Attention   |  0.55      |         |        |         | 
-| Luong Atttention     |  0.59      |         |        |         |    
-| Transformer          |  0.37      |         |        |         |   
-| Par-Inject           |  0.34      |         |        |         |  
-| Par-Inject-4-LSTM    |  0.39      |         |        |         |    
-| Init-Inject          |  0.27      |         |        |         |
+| Model                |   bleu-4    |  bleu-3 | bleu-2 |  bleu-1 | 
+|----------------------|:-----------:|:-------:|:------:|:-------:|
+| Bahdanau Attention   |  0.5529     | 0.6401  | 0.7334 | 0.8418  | 
+| Luong Atttention     |  0.5889     | 0.6605  | 0.7410 | 0.8433  |    
+| Transformer          |  0.37       | 0.4562  | 0.5334 | 0.6046  |   
+| Par-Inject           |  0.34       |         |        |         |  
+| Par-Inject-4-LSTM    |  0.3942     | 0.4804  | 0.5889 | 0.7408  |    
+| Init-Inject          |  0.27       |         |        |         |
+| Init-Inject-4-LSTM   |  0.5542     | 0.6031  | 0.6679 | 0.7740  |
 
 </div>
 
