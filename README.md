@@ -128,7 +128,7 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
         </tr>
         <tr>
             <td>Init-Inject</td>
-            <td></td>
+            <td>a girl is stretched out in water , and her hair is taking a breath .</td>
         </tr>
     </tbody>
 </table>
@@ -168,7 +168,7 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
         </tr>
         <tr>
             <td>Init-Inject</td>
-            <td></td>
+            <td>a horse and rider , surrounded by several birds standing near a horse</td>
         </tr>
     </tbody>
 </table>
