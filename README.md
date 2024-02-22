@@ -71,6 +71,12 @@ TODO: diagram
 </p>
   
 # BLEU SCORE
+
+BLEU (Bilingual Evaluation Understudy) is a measurement of the difference between an automatic translation and human-created reference translations of the same source sentence.
+
+The BLEU algorithm compares consecutive phrases of the automatic translation with the consecutive phrases it finds in the reference translation, and counts the number of matches, in a weighted fashion. These matches are position independent. A higher match degree indicates a higher degree of similarity with the reference translation, and higher score. Intelligibility and grammatical correctness aren't taken into account.
+
+
 <div align="center">
   
 | Model                |    cumulative 4-gram  | unigram | bigram | trigram | 4-gram|
