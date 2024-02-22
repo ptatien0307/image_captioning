@@ -76,17 +76,16 @@ BLEU (Bilingual Evaluation Understudy) is a measurement of the difference betwee
 
 The BLEU algorithm compares consecutive phrases of the automatic translation with the consecutive phrases it finds in the reference translation, and counts the number of matches, in a weighted fashion. These matches are position independent. A higher match degree indicates a higher degree of similarity with the reference translation, and higher score. Intelligibility and grammatical correctness aren't taken into account.
 
-
 <div align="center">
   
-| Model                |    cumulative 4-gram  | unigram | bigram | trigram | 4-gram|
-|----------------------|:---------------------:|:-------:|:------:|:-------:|:-----:|
-| Bahdanau Attention   |  0.55                 |         |        |         |       |
-| Luong Atttention     |  0.59                 |         |        |         |       |  
-| Transformer          |  0.37                 |         |        |         |       |  
-| Par-Inject           |  0.34                 |         |        |         |       |  
-| Par-Inject-4-LSTM    |  0.39                 |         |        |         |       |  
-| Init-Inject          |  0.27                 |         |        |         |       |  
+| Model                |   bleu-4   |  bleu-3 | bleu-2 |  bleu-1 | 
+|----------------------|:----------:|:-------:|:------:|:-------:|
+| Bahdanau Attention   |  0.55      |         |        |         | 
+| Luong Atttention     |  0.59      |         |        |         |    
+| Transformer          |  0.37      |         |        |         |   
+| Par-Inject           |  0.34      |         |        |         |  
+| Par-Inject-4-LSTM    |  0.39      |         |        |         |    
+| Init-Inject          |  0.27      |         |        |         |
 
 </div>
 
