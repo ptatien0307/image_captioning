@@ -58,7 +58,6 @@ class Decoder(Module):
         output = self.forward_step(features, embed_words)
         return output
 
-
     def predict(self, feature, max_length, vocab):
         # Embedding sequence
         word = torch.tensor(vocab.word2index['<SOS>']).view(1, -1)
@@ -81,7 +80,26 @@ class Decoder(Module):
         # Convert the vocab idx to words and return sentence
         return ' '.join([vocab.index2word[idx] for idx in captions])
     
+    # def predict(self, features, max_length, vocab):
+    #     # Embedding sequence
+    #     words = torch.full((features.shape[0], 1), vocab.word2index['<SOS>'])
+    #     embed_words = self.embedding(words)
 
+    #     predicted_captions = torch.zeros(features.shape[0], max_length)
+
+    #     for idx in range(max_length):
+    #         # Predict word index
+    #         output = self.forward_step(features, embed_words)[:, -1]
+    #         predicted_word_idx = output.argmax(dim=1)
+    #         predicted_captions[:, idx] = predicted_word_idx.unsqueeze(0)[:, :]
+
+    #         # Procedd with the next predicted word
+    #         next_embed_word = self.embedding(predicted_word_idx).unsqueeze(0)
+    #         next_embed_word = next_embed_word.permute(1, 0, 2)
+    #         embed_words = torch.cat((embed_words, next_embed_word), dim=1)
+
+    #     return predicted_captions
+    
 class ParInjectCaptioner(torch.nn.Module):
     def __init__(self, vocab_size,  vocab, embed_dim, encoder_dim, decoder_dim, num_layers):
         super().__init__()

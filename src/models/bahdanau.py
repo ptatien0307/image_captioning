@@ -83,6 +83,27 @@ class Decoder(Module):
         # Convert the vocab idx to words and return sentence
         return ' '.join([vocab.index2word[idx] for idx in captions]), attention
     
+    # def predict(self, feature, max_length, vocab=None):
+    #     # Starting input
+    #     word = torch.full((feature.shape[0], 1), vocab.word2index['<SOS>'])
+
+    #     # Embedding sequence
+    #     embeds = self.embedding(word)
+    #     predicted_captions = torch.zeros(max_length, feature.shape[0])
+    #     hidden_state, cell_state = self.init_hidden_state(feature)
+
+    #     for idx in range(max_length):
+    #         embed_word = embeds[:, 0]
+    #         output, hidden_state, cell_state, attn_weight = self.forward_step(embed_word, feature, hidden_state, cell_state)
+    #         # Predict word index
+    #         predicted_word_idx = output.argmax(dim=1)
+    #         predicted_captions[idx, :] = predicted_word_idx.unsqueeze(0)[:, :]
+
+    #         # Send generated word as the next caption
+    #         embeds = self.embedding(predicted_word_idx.unsqueeze(1))
+    #     predicted_captions = predicted_captions.permute(1, 0)
+    #     return predicted_captions
+
 class BahdanauCaptioner(Module):
     def __init__(self, vocab_size, embed_dim, attention_dim, encoder_dim, decoder_dim, vocab):
         super(BahdanauCaptioner, self).__init__()

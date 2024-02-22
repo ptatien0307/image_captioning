@@ -46,7 +46,6 @@ class Decoder(Module):
         output = self.linear(output)
         return output
 
-
     def predict(self, feature, max_length, vocab):
         word = torch.tensor([vocab.word2index['<SOS>']] + [0] * (max_length - 1)).view(1, -1)
         padding_mask = torch.Tensor([True] * max_length).view(1, -1)
@@ -70,6 +69,38 @@ class Decoder(Module):
 
         return ' '.join([vocab.index2word[idx] for idx in predicted_captions])
     
+    # def predict(self, features, max_length, vocab):
+    #     n_samples = features.size(0)
+
+    #     word = torch.tensor([vocab.word2index['<SOS>']] + [0] * (max_length - 1)).view(1, -1)
+    #     word = word.repeat(n_samples, 1)
+
+    #     padding_mask = torch.Tensor([True] * max_length).view(1, -1)
+    #     padding_mask = padding_mask.repeat(n_samples, 1)
+
+    #     predicted_captions = [[] for _ in range(n_samples)]
+    #     is_predicted = [False] * n_samples
+
+    #     for i in range(max_length - 1):
+    #         # Update the padding masks
+    #         padding_mask[:, i] = False
+
+    #         # Get the model prediction for the next word
+    #         output = self.forward(features, word, padding_mask)
+    #         output = output[torch.arange(n_samples), [i] * n_samples].clone()
+    #         predicted_word_idx = output.argmax(dim=-1)
+
+    #         for idx in range(n_samples):
+    #             if is_predicted[idx]:
+    #                 continue
+    #             predicted_captions[idx].append(predicted_word_idx[idx].item())
+    #             if predicted_word_idx[idx].item() == 2:
+    #                 is_predicted[idx] = True
+    #         if np.all(is_predicted):
+    #             break
+
+    #         word[torch.arange(n_samples), [i + 1] * n_samples] = predicted_word_idx.view(-1)
+    #     return predicted_captions
 
 class TransformerCaptioner(torch.nn.Module):
     def __init__(self, n_tokens, d_model, n_heads, dim_forward, n_layers, encoder_dim, vocab):
