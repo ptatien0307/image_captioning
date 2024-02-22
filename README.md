@@ -73,14 +73,14 @@ TODO: diagram
 # BLEU SCORE
 <div align="center">
   
-| Model                |    BLEU Score   | 
-|----------------------|:---------------:|
-| Bahdanau Attention   |  0.55           | 
-| Luong Atttention     |  0.59           |  
-| Transformer          |  0.37           |  
-| Par-Inject           |  0.34           |  
-| Par-Inject-4-LSTM    |  0.39           |  
-| Init-Inject          |  0.27           |  
+| Model                |    cumulative 4-gram  | unigram | bigram | trigram | 4-gram|
+|----------------------|:---------------------:|:-------:|:------:|:-------:|:-----:|
+| Bahdanau Attention   |  0.55                 |         |        |         |       |
+| Luong Atttention     |  0.59                 |         |        |         |       |  
+| Transformer          |  0.37                 |         |        |         |       |  
+| Par-Inject           |  0.34                 |         |        |         |       |  
+| Par-Inject-4-LSTM    |  0.39                 |         |        |         |       |  
+| Init-Inject          |  0.27                 |         |        |         |       |  
 
 </div>
 
