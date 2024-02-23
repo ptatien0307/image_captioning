@@ -151,7 +151,7 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
     </thead>
     <tbody>
         <tr>
-            <td rowspan=5 width=50%>
+            <td rowspan=6 width=50%>
               <p align="center">
                 <img src="https://github.com/ptatien0307/image_captioning/assets/79583501/938b4441-1665-473e-ad13-65ddcfb14241" alt="drawing" width="100%" height="100%"/>
               </p>
