@@ -8,26 +8,25 @@ from src.utils import get_dataset_dataloader
 from src.models import BahdanauCaptioner, LuongCaptioner, ParInjectCaptioner, InitInjectCaptioner, TransformerCaptioner
 
 
-config = InitInjectConfig()
-dataset, loader = get_dataset_dataloader(config.csv_file,
-                                     config.transform,
-                                     config.batch_size,
-                                     config.max_length,
-                                     config.freq_threshold)
+dataset, loader = get_dataset_dataloader(InitInjectConfig.csv_file,
+                                     InitInjectConfig.transform,
+                                     InitInjectConfig.batch_size,
+                                     InitInjectConfig.max_length,
+                                     InitInjectConfig.freq_threshold)
 
 model = InitInjectCaptioner(
     vocab=dataset.vocab,
     vocab_size=len(dataset.vocab),
 
-    embed_dim=config.embedding_dim,
-    encoder_dim=config.encoder_dim,
-    decoder_dim=config.decoder_dim,
-    num_layers=config.num_layers
+    embed_dim=InitInjectConfig.embedding_dim,
+    encoder_dim=InitInjectConfig.encoder_dim,
+    decoder_dim=InitInjectConfig.decoder_dim,
+    num_layers=InitInjectConfig.num_layers
 )
 optimizer = torch.optim.Adam(model.parameters(), lr=3e-4)
 criterion = torch.nn.CrossEntropyLoss(ignore_index=0)
 
 
-trainer = Trainer(config, dataset, loader, 
+trainer = Trainer(InitInjectConfig, dataset, loader, 
                   model, optimizer, criterion)
 trainer.train(resume=False)

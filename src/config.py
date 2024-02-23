@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 from torchvision import transforms
 
-@dataclass
-class InitInjectConfig():
+class InitInjectConfig:
     csv_file = "dataset/captions.txt"
     max_length = 50
     freq_threshold = 5
