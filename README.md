@@ -78,15 +78,16 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
 
 <div align="center">
   
-| Model                |   bleu-4    |  bleu-3 | bleu-2 |  bleu-1 | 
-|----------------------|:-----------:|:-------:|:------:|:-------:|
-| Bahdanau Attention   |  0.5529     | 0.6401  | 0.7334 | 0.8418  | 
-| Luong Atttention     |  0.5889     | 0.6605  | 0.7410 | 0.8433  |    
-| Transformer          |  0.37       | 0.4562  | 0.5334 | 0.6046  |   
-| Par-Inject           |  0.34       |         |        |         |  
-| Par-Inject-4-LSTM    |  0.3942     | 0.4804  | 0.5889 | 0.7408  |    
-| Init-Inject          |  0.27       |         |        |         |
-| Init-Inject-4-LSTM   |  0.5542     | 0.6031  | 0.6679 | 0.7740  |
+| Model                |   bleu-4         |  bleu-3      | bleu-2      |  bleu-1      | 
+|----------------------|:----------------:|:------------:|:-----------:|:------------:|
+| Bahdanau Attention   |  0.5529          | 0.6401       | 0.7334      | 0.8418       | 
+| Luong Atttention     |  0.5889          | 0.6605       | 0.7410      | 0.8433       |    
+| Transformer          |  0.3735          | 0.4562       | 0.5334      | 0.6046       | 
+| Transformer-v2       |  **0.6924**      | **0.7738**   | **0.8499**  | **0.9169**   | 
+| Par-Inject           |  0.34            |              |             |              |  
+| Par-Inject-4-LSTM    |  0.3942          | 0.4804       | 0.5889      | 0.7408       |    
+| Init-Inject          |  0.27            |              |             |              |
+| Init-Inject-4-LSTM   |  0.5542          | 0.6031       | 0.6679      | 0.7740       |
 
 </div>
 
@@ -106,7 +107,7 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
     </thead>
     <tbody>
         <tr>
-            <td rowspan=5 width=50%>
+            <td rowspan=6 width=50%>
               <p align="center">
                 <img src="https://github.com/ptatien0307/image_captioning/assets/79583501/bcec898f-4d43-4711-861b-fc686b514ba8" alt="drawing" width="100%" height="100%"/>
               </p>
@@ -121,6 +122,10 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
         <tr>
             <td>Transformer</td>
             <td>a man in a red shirt is riding a skateboard in a pool</td>
+        </tr>
+        <tr>
+            <td>Transformer-v2</td>
+            <td>a girl is laying on her back in shallow water</td>
         </tr>
         <tr>
             <td>Par-Inject-4LSTM</td>
@@ -161,6 +166,10 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
         <tr>
             <td>Transformer</td>
             <td>a man and a female stand around a fire</td>
+        </tr>
+        <tr>
+            <td>Transformer-v2</td>
+            <td>a girl and her horse stand by a fire</td>
         </tr>
         <tr>
             <td>Par-Inject-4LSTM</td>
