@@ -181,3 +181,11 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
         </tr>
     </tbody>
 </table>
+
+# Web
+<p align="center">
+<img src="https://github.com/ptatien0307/image_captioning/assets/79583501/b44a88bb-c7f1-4631-a850-28d2145dffc7" alt="drawing" width="50%" height="50%"/>
+<br/>
+</p>
+
+
