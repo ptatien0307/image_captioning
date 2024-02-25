@@ -50,6 +50,7 @@ async def create_upload_file(request: Request, files: List[UploadFile]=File(...)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image_input = transform(image).unsqueeze(0)
         caption = model.generate_caption(image_input)
+        caption = caption[:-5]
 
     return templates.TemplateResponse("index.html", {"request": request, 
                                                      "image": 'uploaded_image.jpg',
