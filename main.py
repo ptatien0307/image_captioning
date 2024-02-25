@@ -18,7 +18,7 @@ from src.dataset import Vocabulary
 app = FastAPI()
 app.mount("/images", StaticFiles(directory="images"), name="images")
 templates = Jinja2Templates(directory='templates')
-model = load_model("runs/models/transformer.pth")
+model = load_model("runs/models/transformer-v2.pth")
 model.eval()
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 transform = transforms.Compose([

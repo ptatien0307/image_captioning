@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 
 from .models import BahdanauCaptioner, LuongCaptioner, ParInjectCaptioner, InitInjectCaptioner, TransformerCaptioner
-from .dataset import ImageCaptioningDataset
+from .dataset import ICDatasetTransformer, ICDataset
 
 def load_model(path):
     name = path.split('/')[-1][:-4]
@@ -45,7 +45,7 @@ def load_model(path):
                 decoder_dim=checkpoint['decoder_dim'],
                 num_layers=checkpoint['num_layers'],
             )
-        case 'transformer':
+        case 'transformer-v2':
             model = TransformerCaptioner(
                 n_tokens=checkpoint['n_tokens'],
                 d_model=checkpoint['d_model'],
@@ -59,7 +59,7 @@ def load_model(path):
     return model
 
 def get_dataset_dataloader(file, transform, batch_size, max_length, freq_threshold):
-    dataset = ImageCaptioningDataset(
+    dataset = ICDataset(
                         csv_file=file,
                         transform=transform,
                         max_length=max_length,

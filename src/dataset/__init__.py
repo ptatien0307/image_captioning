@@ -1,2 +1,2 @@
 from .vocabulary import Vocabulary
-from .dataset import ImageCaptioningDataset
+from .dataset import ICDataset, ICDatasetTransformer
