@@ -88,7 +88,7 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
 | Par-Inject-4-LSTM    |  0.3942          | 0.4804       | 0.5889      | 0.7408       |    
 | Init-Inject          |  0.27            |              |             |              |
 | Init-Inject-4-LSTM   |  0.5542          | 0.6031       | 0.6679      | 0.7740       |
-
+| ViT-GPT2             |  0.3236          | 0.4273       | 0.5469      | 0.6842       |
 </div>
 
 
@@ -107,7 +107,7 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
     </thead>
     <tbody>
         <tr>
-            <td rowspan=6 width=50%>
+            <td rowspan=7 width=50%>
               <p align="center">
                 <img src="https://github.com/ptatien0307/image_captioning/assets/79583501/bcec898f-4d43-4711-861b-fc686b514ba8" alt="drawing" width="100%" height="100%"/>
               </p>
@@ -135,6 +135,10 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
             <td>Init-Inject</td>
             <td>a girl is stretched out in water , and her hair is taking a breath .</td>
         </tr>
+       <tr>
+            <td>ViT-GPT2</td>
+            <td>A girl in a bikini lays on the beach .</td>
+        </tr>
     </tbody>
 </table>
 
@@ -151,7 +155,7 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
     </thead>
     <tbody>
         <tr>
-            <td rowspan=6 width=50%>
+            <td rowspan=7 width=50%>
               <p align="center">
                 <img src="https://github.com/ptatien0307/image_captioning/assets/79583501/938b4441-1665-473e-ad13-65ddcfb14241" alt="drawing" width="100%" height="100%"/>
               </p>
@@ -178,6 +182,10 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
         <tr>
             <td>Init-Inject</td>
             <td>a horse and rider , surrounded by several birds standing near a horse</td>
+        </tr>
+        <tr>
+            <td>ViT-GPT2</td>
+            <td>A woman and a young boy are sitting in a fire .</td>
         </tr>
     </tbody>
 </table>
