@@ -139,22 +139,7 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
             <td>ViT-GPT2</td>
             <td>A girl in a bikini lays on the beach .</td>
         </tr>
-    </tbody>
-</table>
-
-
-
-
-<table>
-    <thead>
-        <tr>
-            <th>Image</th>
-            <th>Model</th>
-            <th>Generated caption</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
+          <tr>
             <td rowspan=7 width=50%>
               <p align="center">
                 <img src="https://github.com/ptatien0307/image_captioning/assets/79583501/938b4441-1665-473e-ad13-65ddcfb14241" alt="drawing" width="100%" height="100%"/>
@@ -190,9 +175,10 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
     </tbody>
 </table>
 
+
 # Web
 <p align="center">
-<img src="https://github.com/ptatien0307/image_captioning/assets/79583501/b44a88bb-c7f1-4631-a850-28d2145dffc7" alt="drawing" width="50%" height="50%"/>
+<img src="https://github.com/ptatien0307/image_captioning/assets/79583501/b44a88bb-c7f1-4631-a850-28d2145dffc7" alt="drawing" width="75%" height="75%"/>
 <br/>
 </p>
 
