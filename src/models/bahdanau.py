@@ -123,4 +123,4 @@ class BahdanauCaptioner(Module):
         feature = self.image_encoder(image)
         predicted_caption, attn_weights = self.text_decoder.predict(feature, max_length, self.vocab)
 
-        return predicted_caption, attn_weights
+        return predicted_caption

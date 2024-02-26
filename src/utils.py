@@ -1,6 +1,9 @@
-import torch
 import matplotlib.pyplot as plt
+
+import torch
 from torch.utils.data import DataLoader
+
+from transformers import VisionEncoderDecoderModel, ViTImageProcessor, GPT2TokenizerFast
 
 from .models import BahdanauCaptioner, LuongCaptioner, ParInjectCaptioner, InitInjectCaptioner, TransformerCaptioner
 from .dataset import ICDatasetTransformer, ICDataset
@@ -44,8 +47,8 @@ def load_model(path):
                 encoder_dim=checkpoint['encoder_dim'],
                 decoder_dim=checkpoint['decoder_dim'],
                 num_layers=checkpoint['num_layers'],
-            )
-        case 'transformer-v2':
+            )    
+        case 'transformer':
             model = TransformerCaptioner(
                 n_tokens=checkpoint['n_tokens'],
                 d_model=checkpoint['d_model'],
@@ -57,6 +60,14 @@ def load_model(path):
             )
     model.load_state_dict(checkpoint['model_state_dict'])
     return model
+
+def load_vit_gpt(path):
+    model = VisionEncoderDecoderModel.from_pretrained(path)
+    tokenizer = GPT2TokenizerFast.from_pretrained(path)
+    image_processor = ViTImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
+
+    return model, tokenizer, image_processor
+
 
 def get_dataset_dataloader(file, transform, batch_size, max_length, freq_threshold):
     dataset = ICDataset(

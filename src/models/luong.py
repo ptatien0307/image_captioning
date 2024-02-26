@@ -67,7 +67,7 @@ class Decoder(Module):
         hidden_state, cell_state = self.init_hidden_state(feature)
 
         for idx in range(max_length):
-            embed_word = embed[:, 0]
+            embed_word = embeds[:, 0]
             output, hidden_state, cell_state, attn_weight = self.forward_step(embed_word, feature, hidden_state, cell_state)
             attention.append(attn_weight.cpu().detach().numpy())
 
@@ -125,4 +125,4 @@ class LuongCaptioner(Module):
         feature = self.image_encoder(image)
         predicted_caption, attn_weights = self.text_decoder.predict(feature, max_length, self.vocab)
 
-        return predicted_caption, attn_weights
+        return predicted_caption
