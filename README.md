@@ -88,7 +88,7 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
 | Par-Inject-4-LSTM    |  0.3942          | 0.4804       | 0.5889      | 0.7408       |    
 | Init-Inject          |  0.27            |              |             |              |
 | Init-Inject-4-LSTM   |  0.5542          | 0.6031       | 0.6679      | 0.7740       |
-| ViT-GPT2             |  0.3236          | 0.4273       | 0.5469      | 0.6842       |
+| ViT-GPT2             |  0.5202          | 0.5960       | 0.6759      | 0.7622       |
 </div>
 
 
