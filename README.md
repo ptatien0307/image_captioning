@@ -60,15 +60,21 @@ a single vector before being fed to the output layer.
 </p>
 
 In image captioning, we will use only the decoder part of the transformer for caption generation. We won't have a encoder so we replace it with a CNN model which will extract features from image and feed it into decoder as memory
-
-TODO: diagram
-
 # ViT
 <p align="center">
 <img src="https://github.com/ptatien0307/image_captioning/assets/79583501/149d363e-ab27-4955-9d9b-7454d8e6147f" alt="drawing" width="50%" height="50%"/>
 <br/>
 <a style="text-align: center">Vison Transformer (ViT)</a>
 </p>
+
+
+<p align="center">
+<img src="https://github.com/ptatien0307/image_captioning/assets/79583501/1b83ce28-225c-4ce4-8d8a-704971f579a2" alt="drawing" width="50%" height="50%"/>
+<br/>
+<a style="text-align: center">ViT-GPT2</a>
+</p>
+
+
   
 # BLEU SCORE
 
@@ -93,7 +99,6 @@ The BLEU algorithm compares consecutive phrases of the automatic translation wit
 
 
 # TODO
-* ViT
 * Quantization
 
 # Sample
