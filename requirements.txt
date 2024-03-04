@@ -1,0 +1,11 @@
+torch
+torchvision
+fastapi[all]
+uvicorn
+numpy
+matplotlib
+opencv-python-headless
+Jinja2
+pandas
+spacy
+transformers
